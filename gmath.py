@@ -25,7 +25,7 @@ def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     pass
 
 def calculate_ambient(alight, areflect):
-    pass
+    normalize(alight)
 
 def calculate_diffuse(light, dreflect, normal):
     pass
@@ -34,7 +34,9 @@ def calculate_specular(light, sreflect, view, normal):
     pass
 
 def limit_color(color):
-    pass
+    if color<0:color=0
+    if color>255:color=255
+    return color
 
 #vector functions
 #normalize vetor, should modify the parameter
