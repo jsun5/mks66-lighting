@@ -25,7 +25,8 @@ def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     normalize(normal)
 	normalize(light[0])
 	normalize(view)
-
+	amb=calculate_ambient(ambient,areflect)
+	dif=calculate_diffuse(light,dreflect,normal)
 	
 	
 def calculate_ambient(alight, areflect):
@@ -35,7 +36,12 @@ def calculate_ambient(alight, areflect):
 	
 
 def calculate_diffuse(light, dreflect, normal):
-    pass
+	if dot_product(light[0],normal) > 0:
+		return [light[1][0]*dreflect[0]*dot_product(light[0],normal),
+				light[1][1]*dreflect[1]*dot_product(light[0],normal),
+				light[1][2]*dreflect[2]*dot_product(light[0],normal)]
+	else:
+		return [0,0,0]
 
 def calculate_specular(light, sreflect, view, normal):
     pass
