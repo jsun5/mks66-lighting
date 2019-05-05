@@ -22,10 +22,17 @@ SPECULAR_EXP = 4
 
 #lighting functions
 def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
-    pass
+    normalize(normal)
+	normalize(light[0])
+	normalize(view)
 
+	
+	
 def calculate_ambient(alight, areflect):
-    normalize(alight)
+    return [alight[0]*areflect[0],
+			alight[1]*areflect[1],
+			alight[2]*areflect[2]]
+	
 
 def calculate_diffuse(light, dreflect, normal):
     pass
@@ -34,9 +41,9 @@ def calculate_specular(light, sreflect, view, normal):
     pass
 
 def limit_color(color):
-    if color<0:color=0
-    if color>255:color=255
-    return color
+	for i in color.length:
+		if color[i]<0:color[i]=0
+		elif color[i]>255:color[i]=255
 
 #vector functions
 #normalize vetor, should modify the parameter
