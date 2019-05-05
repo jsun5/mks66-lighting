@@ -23,33 +23,50 @@ SPECULAR_EXP = 4
 #lighting functions
 def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     normalize(normal)
-	normalize(light[0])
-	normalize(view)
-	amb=calculate_ambient(ambient,areflect)
-	dif=calculate_diffuse(light,dreflect,normal)
-	
-	
+    normalize(light[0])
+    normalize(view)
+    amb=calculate_ambient(ambient,areflect)
+    dif=calculate_diffuse(light,dreflect,normal)
+    spe=calculate_specular(light,sreflect,view,normal)
+    
+    total = [int( amb[0]+dif[0]+spe[0] ),
+             int( amb[1]+dif[1]+spe[1] ),
+             int( amb[2]+dif[2]+spe[2] )]
+             
+    limit_color(total)
+    return total
+    
+    
 def calculate_ambient(alight, areflect):
     return [alight[0]*areflect[0],
-			alight[1]*areflect[1],
-			alight[2]*areflect[2]]
-	
+            alight[1]*areflect[1],
+            alight[2]*areflect[2]]
+    
 
 def calculate_diffuse(light, dreflect, normal):
-	if dot_product(light[0],normal) > 0:
-		return [light[1][0]*dreflect[0]*dot_product(light[0],normal),
-				light[1][1]*dreflect[1]*dot_product(light[0],normal),
-				light[1][2]*dreflect[2]*dot_product(light[0],normal)]
-	else:
-		return [0,0,0]
+    if dot_product(light[0],normal) > 0:
+        return [light[1][0]*dreflect[0]*dot_product(light[0],normal),
+                light[1][1]*dreflect[1]*dot_product(light[0],normal),
+                light[1][2]*dreflect[2]*dot_product(light[0],normal)]
+    else:
+        return [0,0,0]
 
 def calculate_specular(light, sreflect, view, normal):
-    pass
+    init = [(2*dot_product(light[0],normal)*normal[0]) - light[0][0],
+            (2*dot_product(light[0],normal)*normal[1]) - light[0][1],
+            (2*dot_product(light[0],normal)*normal[2]) - light[0][2]]
+    
+    if(dot_product(init,view)>0):
+        return [sreflect[0]*light[1][0]*(dot_product(init,view)**SPECULAR_EXP),
+                sreflect[1]*light[1][1]*(dot_product(init,view)**SPECULAR_EXP),
+                sreflect[2]*light[1][2]*(dot_product(init,view)**SPECULAR_EXP)]
+    else:
+        return [0,0,0]
 
 def limit_color(color):
-	for i in color.length:
-		if color[i]<0:color[i]=0
-		elif color[i]>255:color[i]=255
+    for i in range(len(color)):
+        if color[i]<0:color[i]=0
+        elif color[i]>255:color[i]=255
 
 #vector functions
 #normalize vetor, should modify the parameter
